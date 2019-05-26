@@ -7,8 +7,8 @@ import datetime
 app = Flask(__name__)
 
 
-key = ""
-token = ""
+key = "AAAAIr-TAKU:APA91bE-x-a3BLiKNPYuepFTXhhetURsq7-Z5Ocwe6ikbGFkfa4vzzzxtvZVj1J7hiwLQ3JOVakBi274xqrKNoI7VvfXkUuglcZt1gpXj3UMSmoKVQ5q-06-bc2pagt6hRGWKWDSZcHz"
+token = "cicwFTl8KuE:APA91bESEuXMkQbHM4tQEjNCmLGOftHTzzRSpbfEHDNxlPHWeQUj5uAwkVxpsB_1k_jAlDliXRs3xMbe9qYwg9bkzPVvnDWofu3oTcM7qfvDxC9ifWEXAlhcJc_ZHCTp-TCaHx-0Zsx4"
 
 #######################################################################################################################
 # ORÇAMENTOS
@@ -26,9 +26,9 @@ orcamentos = [{"idOrcamento": 1, "nome": "Orçamento prédio Ana Maria", "valorT
                 ,{"idOrcamento": 11, "nome": "Orcamento prédio João das Neves", "valorTotal":50500, "cliente": "José Bernardes", "statusOrcamento": "pendente"}
                 ,{"idOrcamento": 12, "nome": "Orcamento prédio Aramam", "valorTotal":33300, "cliente": "Marcia Oliveira", "statusOrcamento": "pendente"}
                 ,{"idOrcamento": 13, "nome": "Orcamento prédio Junqueira de Alencar", "valorTotal":14500, "cliente": "Marcos dos Reis", "statusOrcamento": "pendente"}
-                ,{"idOrcamento": 14, "nome": "Orcamento prédio Leonor de Castro", "valorTotal":19400, "cliente": "Ramon Valdez", "statusOrcamento": "pendente"}                
+                ,{"idOrcamento": 14, "nome": "Orcamento prédio Leonor de Castro", "valorTotal":19400, "cliente": "Ramon Valdez", "statusOrcamento": "pendente"}
                 ]
-            
+
 @app.route("/orcamentos", methods=['GET'])
 def getListaOrcamento():
     return jsonify(orcamentos)
@@ -74,7 +74,7 @@ def putOrcamento(id):
             orcamento["valorTotal"] = content["valorTotal"]
             orcamento["cliente"] = content["cliente"]
             orcamento["statusOrcamento"] = content["statusOrcamento"]
-            
+
             return jsonify({"status":"OK", "msg":"pedido edidtado com sucesso"})
 
     return jsonify({"status":"ERRO", "msg": "Erro: não existe pedido com ess Id"})
@@ -174,7 +174,7 @@ def putPedido(id):
             pedido["dtPedido"] = content["dtPedido"]
             pedido["descricao"] = content["descricao"]
             pedido["criadoNoApp"] = content["criadoNoApp"]
-            
+
             return jsonify({"status":"OK", "msg":"pedido edidtado com sucesso"})
 
     return jsonify({"status":"ERRO", "msg": "Erro: não existe pedido com ess Id"})
@@ -213,6 +213,26 @@ def enviarPushPedido(pedido):
     response = urllib.request.urlopen(req, jsondataasbytes)
     print(response)
 
+####################################################################################################################
+##################     LOGIN
+credenciais = [
+    {"usuario":"vini", "senha":"senha"},
+    {"usuario":"usuario", "senha":"senha"},
+    {"usuario":"teste", "senha":"123"},
+    {"usuario":"sppApp", "senha":"senha"},
+    ]
+
+@app.route("/login", methods=['post'])
+def login():
+    global credenciais
+    content = request.get_json()
+
+    for credencial in credenciais:
+        if content["usuario"] == credencial["usuario"] and content["senha"] == credencial["senha"]:
+            return jsonify({"autenticado":"true"})
+
+    return jsonify({"autenticado":"false"})
 
 if __name__ == "__main__":
     app.run()
+
